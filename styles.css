@@ -99,6 +99,22 @@ body {
     filter: brightness(1.05);
 }
 
+.ghost {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: var(--text);
+    padding: 0.45rem 1.2rem;
+    border-radius: 999px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.ghost:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    color: white;
+}
+
 .dashboard {
     padding: 2.5rem clamp(1rem, 4vw, 4rem) 3.5rem;
     display: flex;
@@ -188,6 +204,20 @@ h1 {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+}
+
+.export-actions {
+    text-align: right;
+}
+
+.export-actions .muted {
+    margin-bottom: 0.25rem;
+}
+
+.export-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
 }
 
 .status-pill {

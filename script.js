@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const revenueCtx = document.getElementById('revenueChart');
     const channelCtx = document.getElementById('channelChart');
     const scenarioLog = document.getElementById('scenarioLog');
+    const exportJsonBtn = document.getElementById('exportJson');
+    const exportCsvBtn = document.getElementById('exportCsv');
 
     revenueChart = new Chart(revenueCtx, {
         type: 'line',
@@ -92,6 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
         confidenceOutput.textContent = `${event.target.value}%`;
     });
 
+    exportJsonBtn?.addEventListener('click', () => exportData('json'));
+    exportCsvBtn?.addEventListener('click', () => exportData('csv'));
+
     form.addEventListener('submit', event => {
         event.preventDefault();
         const formData = new FormData(form);
@@ -130,6 +135,66 @@ document.addEventListener('DOMContentLoaded', () => {
         confidenceOutput.textContent = '80%';
     });
 });
+
+function exportData(format) {
+    const payload = {
+        revenue: { ...state.revenue },
+        channels: { ...state.channels },
+        scenarios: state.scenarios
+    };
+
+    if (format === 'json') {
+        const jsonString = JSON.stringify(payload, null, 2);
+        triggerDownload(jsonString, 'insightflow-data.json', 'application/json');
+        return;
+    }
+
+    if (format === 'csv') {
+        const csvString = buildCsvString(payload);
+        triggerDownload(csvString, 'insightflow-data.csv', 'text/csv');
+    }
+}
+
+function buildCsvString(payload) {
+    const rows = [
+        ['dataset', 'label', 'value', 'confidence', 'scenarioType', 'target', 'notes']
+    ];
+
+    payload.revenue.labels.forEach((label, index) => {
+        rows.push(['Revenue', label, payload.revenue.values[index], '', '', '', '']);
+    });
+
+    payload.channels.labels.forEach((label, index) => {
+        rows.push(['Channels', label, payload.channels.values[index], '', '', '', '']);
+    });
+
+    payload.scenarios.forEach(entry => {
+        rows.push([
+            'Scenario',
+            entry.label,
+            entry.value,
+            entry.confidence || '',
+            entry.scenarioType || '',
+            entry.target || '',
+            (entry.notes || '').replace(/\n/g, ' ')
+        ]);
+    });
+
+    return rows
+        .map(row => row.map(value => `"${String(value ?? '').replace(/"/g, '""')}"`).join(','))
+        .join('\n');
+}
+
+function triggerDownload(content, filename, type) {
+    const blob = new Blob([content], { type });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+}
 
 function updateChart(target) {
     if (target === 'revenue' && revenueChart) {
