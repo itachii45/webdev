@@ -1,12 +1,13 @@
 const state = {
     revenue: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
-        values: [220, 240, 310, 365]
+        labels: ['Q1 Launch', 'Q2 Refactor', 'Summer AI beta', 'Autumn GA'],
+        values: [220, 248, 315, 382]
     },
     channels: {
-        labels: ['Organic', 'Paid', 'Partners', 'Community'],
-        values: [45, 26, 18, 11]
-    }
+        labels: ['DevRel', 'Paid media', 'Strategic partners', 'AI community'],
+        values: [36, 24, 21, 19]
+    },
+    scenarios: []
 };
 
 const colors = {
@@ -23,6 +24,7 @@ let channelChart;
 document.addEventListener('DOMContentLoaded', () => {
     const revenueCtx = document.getElementById('revenueChart');
     const channelCtx = document.getElementById('channelChart');
+    const scenarioLog = document.getElementById('scenarioLog');
 
     revenueChart = new Chart(revenueCtx, {
         type: 'line',
@@ -80,13 +82,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    renderScenarioLog(scenarioLog);
+
     const form = document.getElementById('dataForm');
+    const confidenceInput = form.querySelector('input[name="confidence"]');
+    const confidenceOutput = document.getElementById('confidenceValue');
+
+    confidenceInput?.addEventListener('input', event => {
+        confidenceOutput.textContent = `${event.target.value}%`;
+    });
+
     form.addEventListener('submit', event => {
         event.preventDefault();
         const formData = new FormData(form);
         const target = formData.get('target');
         const label = formData.get('label');
         const value = Number(formData.get('value'));
+        const scenarioType = formData.get('scenario');
+        const confidence = Number(formData.get('confidence'));
+        const notes = (formData.get('notes') || '').toString().trim();
 
         if (!label || Number.isNaN(value)) {
             return;
@@ -103,7 +117,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         updateChart(target);
+        prependScenario({
+            scenarioType,
+            target,
+            label,
+            value,
+            confidence,
+            notes
+        });
+        renderScenarioLog(scenarioLog);
         form.reset();
+        confidenceOutput.textContent = '80%';
     });
 });
 
@@ -119,4 +143,33 @@ function updateChart(target) {
         channelChart.data.datasets[0].data = state.channels.values;
         channelChart.update();
     }
+}
+
+function prependScenario(entry) {
+    state.scenarios.unshift({
+        ...entry,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    });
+    state.scenarios = state.scenarios.slice(0, 5);
+}
+
+function renderScenarioLog(container) {
+    if (!state.scenarios.length) {
+        container.innerHTML = '<p class="muted">Submit a scenario to see it logged here.</p>';
+        return;
+    }
+
+    container.innerHTML = state.scenarios
+        .map(scenario => `
+            <article class="scenario-entry">
+                <header>
+                    <span class="scenario-pill">${scenario.scenarioType}</span>
+                    <span class="timestamp">${scenario.timestamp}</span>
+                </header>
+                <p class="scenario-target">${scenario.target === 'revenue' ? 'Revenue' : 'Channel mix'} → <strong>${scenario.label}</strong> updated to <strong>${scenario.value}</strong></p>
+                <p class="scenario-meta">Confidence: ${scenario.confidence || 0}%</p>
+                ${scenario.notes ? `<p class="scenario-notes">${scenario.notes}</p>` : ''}
+            </article>
+        `)
+        .join('');
 }

@@ -33,22 +33,22 @@
             <div>
                 <p class="eyebrow">Realtime dashboards</p>
                 <h1>Operational visibility for modern teams</h1>
-                <p class="lede">Monitor performance, revenue, and channel attribution with interactive visualisations that stay in sync with your data.</p>
+                <p class="lede">Monitor cloud revenue, developer outreach, and platform health metrics with interactive visualisations that stay in sync with your product data.</p>
             </div>
             <div class="hero-metrics">
                 <div class="metric-card">
-                    <h3>Active users</h3>
-                    <p class="value">42,930</p>
+                    <h3>API requests / min</h3>
+                    <p class="value">1.8M</p>
                     <span class="trend positive">+12.3%</span>
                 </div>
                 <div class="metric-card">
-                    <h3>Net revenue</h3>
+                    <h3>Cloud ARR</h3>
                     <p class="value">$318K</p>
                     <span class="trend positive">+8.4%</span>
                 </div>
                 <div class="metric-card">
-                    <h3>Support SLA</h3>
-                    <p class="value">97.4%</p>
+                    <h3>Latency (p95)</h3>
+                    <p class="value">142ms</p>
                     <span class="trend neutral">on target</span>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                 <div class="panel-header">
                     <div>
                         <p class="eyebrow">Revenue</p>
-                        <h2>Monthly recurring revenue</h2>
+                        <h2>Cloud subscription revenue</h2>
                     </div>
                     <div class="status-pill positive">Live</div>
                 </div>
@@ -115,21 +115,53 @@
                     <label>
                         Target visualisation
                         <select name="target" required>
-                            <option value="revenue">Monthly revenue</option>
+                            <option value="revenue">Cloud revenue</option>
                             <option value="channels">Channel mix</option>
                         </select>
                     </label>
                     <label>
+                        Scenario type
+                        <select name="scenario" required>
+                            <option value="Launch">Feature launch</option>
+                            <option value="Campaign">DevRel campaign</option>
+                            <option value="Pricing">Pricing experiment</option>
+                            <option value="Reliability">Reliability upgrade</option>
+                        </select>
+                    </label>
+                    <label>
                         Label
-                        <input type="text" name="label" placeholder="e.g. May, Social" required />
+                        <input type="text" name="label" placeholder="e.g. Q3, DevRel" required />
                     </label>
                     <label>
                         Value
                         <input type="number" name="value" min="0" step="10" placeholder="Enter value" required />
                     </label>
+                    <label class="range-field">
+                        Confidence
+                        <div class="range-input">
+                            <input type="range" name="confidence" min="40" max="100" step="5" value="80" />
+                            <output id="confidenceValue">80%</output>
+                        </div>
+                    </label>
+                    <label>
+                        Notes
+                        <textarea name="notes" rows="3" placeholder="Describe what drives this change"></textarea>
+                    </label>
                     <button type="submit" class="primary full">Update visualisation</button>
                 </form>
                 <p class="form-hint">When an existing label is updated we recalculate its value, otherwise we add a new point.</p>
+            </div>
+
+            <div class="panel wide scenario-panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Scenario feed</p>
+                        <h2>Recent tech experiments</h2>
+                    </div>
+                </div>
+                <div id="scenarioLog" class="scenario-log">
+                    <p class="muted">Submit a scenario to see it logged here.</p>
+                </div>
             </div>
         </section>
     </main>
