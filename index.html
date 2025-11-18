@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>InsightFlow Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header class="navbar">
+        <div class="brand">
+            <div class="logo">IF</div>
+            <div class="brand-text">
+                <span>InsightFlow</span>
+                <small>Realtime intelligence</small>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <a href="#overview">Overview</a>
+            <a href="#insights">Insights</a>
+            <a href="#team">Team</a>
+            <button class="primary">Upgrade</button>
+        </nav>
+    </header>
+
+    <main class="dashboard" id="overview">
+        <section class="hero">
+            <div>
+                <p class="eyebrow">Realtime dashboards</p>
+                <h1>Operational visibility for modern teams</h1>
+                <p class="lede">Monitor performance, revenue, and channel attribution with interactive visualisations that stay in sync with your data.</p>
+            </div>
+            <div class="hero-metrics">
+                <div class="metric-card">
+                    <h3>Active users</h3>
+                    <p class="value">42,930</p>
+                    <span class="trend positive">+12.3%</span>
+                </div>
+                <div class="metric-card">
+                    <h3>Net revenue</h3>
+                    <p class="value">$318K</p>
+                    <span class="trend positive">+8.4%</span>
+                </div>
+                <div class="metric-card">
+                    <h3>Support SLA</h3>
+                    <p class="value">97.4%</p>
+                    <span class="trend neutral">on target</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid" id="insights">
+            <div class="panel wide">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Revenue</p>
+                        <h2>Monthly recurring revenue</h2>
+                    </div>
+                    <div class="status-pill positive">Live</div>
+                </div>
+                <canvas id="revenueChart" height="180"></canvas>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Channels</p>
+                        <h2>Acquisition mix</h2>
+                    </div>
+                </div>
+                <canvas id="channelChart" height="180"></canvas>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Satisfaction</p>
+                        <h2>NPS trend</h2>
+                    </div>
+                </div>
+                <div class="nps">
+                    <div class="radial">
+                        <svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="52" class="track"></circle>
+                            <circle cx="60" cy="60" r="52" class="progress" stroke-dasharray="327" stroke-dashoffset="65"></circle>
+                        </svg>
+                        <div class="radial-value">
+                            <strong>68</strong>
+                            <span>NPS</span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li><span class="dot green"></span> Promoters 74%</li>
+                        <li><span class="dot yellow"></span> Passives 19%</li>
+                        <li><span class="dot red"></span> Detractors 7%</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel wide" id="team">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">What-if modeling</p>
+                        <h2>Inject scenarios</h2>
+                        <p class="small">Add experimental metrics to immediately see how the charts react.</p>
+                    </div>
+                </div>
+
+                <form id="dataForm" class="data-form">
+                    <label>
+                        Target visualisation
+                        <select name="target" required>
+                            <option value="revenue">Monthly revenue</option>
+                            <option value="channels">Channel mix</option>
+                        </select>
+                    </label>
+                    <label>
+                        Label
+                        <input type="text" name="label" placeholder="e.g. May, Social" required />
+                    </label>
+                    <label>
+                        Value
+                        <input type="number" name="value" min="0" step="10" placeholder="Enter value" required />
+                    </label>
+                    <button type="submit" class="primary full">Update visualisation</button>
+                </form>
+                <p class="form-hint">When an existing label is updated we recalculate its value, otherwise we add a new point.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
