@@ -1,175 +1,218 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>InsightFlow Dashboard</title>
+    <title>Observatoire Étudiants - Université Blida 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body>
-    <header class="navbar">
+    <header class="global-nav">
         <div class="brand">
-            <div class="logo">IF</div>
-            <div class="brand-text">
-                <span>InsightFlow</span>
-                <small>Realtime intelligence</small>
+            <div class="crest">UB1</div>
+            <div>
+                <p class="eyebrow">Université Saad Dahlab</p>
+                <strong>Blida 1</strong>
             </div>
         </div>
-        <nav class="nav-links">
-            <a href="#overview">Overview</a>
-            <a href="#insights">Insights</a>
-            <a href="#team">Team</a>
-            <button class="primary">Upgrade</button>
+        <nav>
+            <a href="#apercu">Aperçu</a>
+            <a href="#analytics">Analytique</a>
+            <a href="#lab">Data Lab</a>
+            <button class="pill">Télécharger la brochure</button>
         </nav>
     </header>
 
-    <main class="dashboard" id="overview">
-        <section class="hero">
-            <div>
-                <p class="eyebrow">Realtime dashboards</p>
-                <h1>Operational visibility for modern teams</h1>
-                <p class="lede">Monitor cloud revenue, developer outreach, and platform health metrics with interactive visualisations that stay in sync with your product data.</p>
+    <main>
+        <section class="hero" id="apercu">
+            <div class="hero-text">
+                <p class="eyebrow">Observatoire des étudiants</p>
+                <h1>Pulsations étudiantes de l'Université Blida 1</h1>
+                <p class="lede">
+                    Visualisez l'évolution des inscriptions, la diversité des spécialités et l'engagement étudiant pour guider
+                    vos décisions pédagogiques en temps réel.
+                </p>
+                <div class="hero-actions">
+                    <button class="primary">Consulter le rapport 2024</button>
+                    <button class="ghost">Partager au rectorat</button>
+                </div>
             </div>
-            <div class="hero-metrics">
-                <div class="metric-card">
-                    <h3>API requests / min</h3>
-                    <p class="value">1.8M</p>
-                    <span class="trend positive">+12.3%</span>
+            <div class="hero-visual">
+                <div class="glow-card">
+                    <p>Laboratoires actifs</p>
+                    <strong>32</strong>
+                    <span>IA, Énergies, BioTech & plus</span>
                 </div>
-                <div class="metric-card">
-                    <h3>Cloud ARR</h3>
-                    <p class="value">$318K</p>
-                    <span class="trend positive">+8.4%</span>
-                </div>
-                <div class="metric-card">
-                    <h3>Latency (p95)</h3>
-                    <p class="value">142ms</p>
-                    <span class="trend neutral">on target</span>
+                <div class="pulse">
+                    <p>taux d'engagement</p>
+                    <strong>92%</strong>
+                    <small>clubs & hackathons</small>
                 </div>
             </div>
         </section>
 
-        <section class="grid" id="insights">
-            <div class="panel wide">
-                <div class="panel-header">
-                    <div>
-                        <p class="eyebrow">Revenue</p>
-                        <h2>Cloud subscription revenue</h2>
-                    </div>
-                    <div class="status-pill positive">Live</div>
-                </div>
-                <canvas id="revenueChart" height="180"></canvas>
-            </div>
+        <section class="quick-stats">
+            <article class="stat-card">
+                <p>Total étudiants</p>
+                <strong data-metric="students">0</strong>
+                <span>licence & master</span>
+            </article>
+            <article class="stat-card">
+                <p>Programmes internationaux</p>
+                <strong>18</strong>
+                <span>partenariats actifs</span>
+            </article>
+            <article class="stat-card">
+                <p>Startups incubées</p>
+                <strong>41</strong>
+                <span>depuis 2021</span>
+            </article>
+            <article class="stat-card">
+                <p>Insertion pro.</p>
+                <strong>87%</strong>
+                <span>6 mois après diplôme</span>
+            </article>
+        </section>
 
-            <div class="panel">
+        <section class="analytics-grid" id="analytics">
+            <article class="panel wide">
                 <div class="panel-header">
                     <div>
-                        <p class="eyebrow">Channels</p>
-                        <h2>Acquisition mix</h2>
+                        <p class="eyebrow">Inscriptions</p>
+                        <h2>Évolution annuelle des étudiants</h2>
                     </div>
+                    <div class="status-chip positive">+4.2% cette année</div>
                 </div>
-                <canvas id="channelChart" height="180"></canvas>
-            </div>
+                <canvas id="enrollmentChart" height="200"></canvas>
+            </article>
 
-            <div class="panel">
+            <article class="panel">
                 <div class="panel-header">
                     <div>
-                        <p class="eyebrow">Satisfaction</p>
-                        <h2>NPS trend</h2>
+                        <p class="eyebrow">Spécialités</p>
+                        <h2>Répartition des filières</h2>
                     </div>
                 </div>
-                <div class="nps">
-                    <div class="radial">
-                        <svg viewBox="0 0 120 120">
-                            <circle cx="60" cy="60" r="52" class="track"></circle>
-                            <circle cx="60" cy="60" r="52" class="progress" stroke-dasharray="327" stroke-dashoffset="65"></circle>
-                        </svg>
-                        <div class="radial-value">
-                            <strong>68</strong>
-                            <span>NPS</span>
-                        </div>
-                    </div>
-                    <ul>
-                        <li><span class="dot green"></span> Promoters 74%</li>
-                        <li><span class="dot yellow"></span> Passives 19%</li>
-                        <li><span class="dot red"></span> Detractors 7%</li>
-                    </ul>
-                </div>
-            </div>
+                <canvas id="specializationChart" height="220"></canvas>
+            </article>
 
-            <div class="panel wide" id="team">
+            <article class="panel insights">
                 <div class="panel-header">
                     <div>
-                        <p class="eyebrow">What-if modeling</p>
-                        <h2>Inject scenarios</h2>
-                        <p class="small">Add experimental metrics to immediately see how the charts react.</p>
+                        <p class="eyebrow">Moments forts</p>
+                        <h2>Vie étudiante</h2>
+                    </div>
+                </div>
+                <ul>
+                    <li>
+                        <strong>Hack4Blida</strong>
+                        <p>140 étudiants réunis pour résoudre les défis climatiques de la Mitidja.</p>
+                    </li>
+                    <li>
+                        <strong>Programme Erasmus+</strong>
+                        <p>28 mobilités sortantes vers l'Espagne, la Turquie et l'Italie.</p>
+                    </li>
+                    <li>
+                        <strong>Clinique IA</strong>
+                        <p>Étudiants IA accompagnent les start-ups locales sur les projets data.</p>
+                    </li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="data-lab" id="lab">
+            <article class="panel form-panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Data lab</p>
+                        <h2>Ajouter une fiche étudiant</h2>
+                        <p class="small">Chaque nouvelle fiche met à jour les graphiques instantanément.</p>
                     </div>
                     <div class="export-actions">
-                        <p class="small muted">Export dashboard data</p>
+                        <p class="small muted">Exporter</p>
                         <div class="export-buttons">
-                            <button type="button" id="exportJson" class="ghost">JSON</button>
-                            <button type="button" id="exportCsv" class="ghost">CSV</button>
+                            <button id="exportJson" type="button" class="ghost">JSON</button>
+                            <button id="exportCsv" type="button" class="ghost">CSV</button>
                         </div>
                     </div>
                 </div>
-
-                <form id="dataForm" class="data-form">
+                <form id="studentForm" class="student-form">
                     <label>
-                        Target visualisation
-                        <select name="target" required>
-                            <option value="revenue">Cloud revenue</option>
-                            <option value="channels">Channel mix</option>
+                        Nom & prénom
+                        <input type="text" name="name" placeholder="Nesrine Mahdi" required />
+                    </label>
+                    <label>
+                        Matricule
+                        <input type="text" name="matricule" placeholder="22CSI204" required />
+                    </label>
+                    <label>
+                        Spécialité
+                        <select name="speciality" required>
+                            <option value="Informatique">Informatique</option>
+                            <option value="Intelligence Artificielle">Intelligence Artificielle</option>
+                            <option value="Télécommunications">Télécommunications</option>
+                            <option value="Énergies Renouvelables">Énergies Renouvelables</option>
+                            <option value="Génie Biomédical">Génie Biomédical</option>
                         </select>
                     </label>
                     <label>
-                        Scenario type
-                        <select name="scenario" required>
-                            <option value="Launch">Feature launch</option>
-                            <option value="Campaign">DevRel campaign</option>
-                            <option value="Pricing">Pricing experiment</option>
-                            <option value="Reliability">Reliability upgrade</option>
+                        Année académique
+                        <select name="year" required>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024" selected>2024</option>
+                            <option value="2025">2025</option>
                         </select>
                     </label>
                     <label>
-                        Label
-                        <input type="text" name="label" placeholder="e.g. Q3, DevRel" required />
-                    </label>
-                    <label>
-                        Value
-                        <input type="number" name="value" min="0" step="10" placeholder="Enter value" required />
+                        Semestre
+                        <select name="semester" required>
+                            <option value="S1">S1</option>
+                            <option value="S2">S2</option>
+                        </select>
                     </label>
                     <label class="range-field">
-                        Confidence
+                        Moyenne générale
                         <div class="range-input">
-                            <input type="range" name="confidence" min="40" max="100" step="5" value="80" />
-                            <output id="confidenceValue">80%</output>
+                            <input type="range" name="gpa" min="8" max="20" step="0.1" value="14" />
+                            <output id="gpaValue">14.0</output>
                         </div>
                     </label>
                     <label>
-                        Notes
-                        <textarea name="notes" rows="3" placeholder="Describe what drives this change"></textarea>
+                        Orientation
+                        <select name="pathway">
+                            <option value="Recherche">Recherche</option>
+                            <option value="Entrepreneuriat">Entrepreneuriat</option>
+                            <option value="Internationale">Internationale</option>
+                            <option value="Professionnalisation">Professionnalisation</option>
+                        </select>
                     </label>
-                    <button type="submit" class="primary full">Update visualisation</button>
+                    <label class="full">
+                        Notes & projets marquants
+                        <textarea name="notes" rows="3" placeholder="Participation au challenge Sahara Solar..."></textarea>
+                    </label>
+                    <button type="submit" class="primary full">Enregistrer la fiche</button>
                 </form>
-                <p class="form-hint">When an existing label is updated we recalculate its value, otherwise we add a new point.</p>
-            </div>
-
-            <div class="panel wide scenario-panel">
+                <p class="hint">Les fiches sont synchronisées avec les graphiques d'inscriptions et de spécialités.</p>
+            </article>
+            <article class="panel log-panel">
                 <div class="panel-header">
                     <div>
-                        <p class="eyebrow">Scenario feed</p>
-                        <h2>Recent tech experiments</h2>
+                        <p class="eyebrow">Live feed</p>
+                        <h2>Inscriptions des étudiants</h2>
                     </div>
                 </div>
-                <div id="scenarioLog" class="scenario-log">
-                    <p class="muted">Submit a scenario to see it logged here.</p>
+                <div id="studentLog" class="log-list">
+                    <p class="muted">Aucune fiche soumise pour le moment.</p>
                 </div>
-            </div>
+            </article>
         </section>
     </main>
 </body>

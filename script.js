@@ -1,240 +1,242 @@
-const state = {
-    revenue: {
-        labels: ['Q1 Launch', 'Q2 Refactor', 'Summer AI beta', 'Autumn GA'],
-        values: [220, 248, 315, 382]
+const yearLabels = ['2020', '2021', '2022', '2023', '2024'];
+const enrollmentValues = [3200, 3420, 3650, 3880, 4105];
+const specializationLabels = [
+    'Informatique',
+    'Intelligence Artificielle',
+    'Télécommunications',
+    'Énergies Renouvelables',
+    'Génie Biomédical'
+];
+const specializationValues = [860, 720, 540, 610, 375];
+
+const studentEntries = [
+    {
+        name: 'Nesrine Mahdi',
+        matricule: '20AI108',
+        speciality: 'Intelligence Artificielle',
+        year: '2024',
+        semester: 'S2',
+        gpa: 15.8,
+        pathway: 'Entrepreneuriat',
+        notes: 'Co-fondatrice de la startup GreenAI, finaliste Hult Prize.'
     },
-    channels: {
-        labels: ['DevRel', 'Paid media', 'Strategic partners', 'AI community'],
-        values: [36, 24, 21, 19]
+    {
+        name: 'Yacine Boulifa',
+        matricule: '19CSI222',
+        speciality: 'Informatique',
+        year: '2023',
+        semester: 'S1',
+        gpa: 14.1,
+        pathway: 'Recherche',
+        notes: 'Travaille sur la détection d’objets pour le laboratoire LCSI.'
     },
-    scenarios: []
-};
+    {
+        name: 'Samia Zerhouni',
+        matricule: '21TEL045',
+        speciality: 'Télécommunications',
+        year: '2024',
+        semester: 'S2',
+        gpa: 13.6,
+        pathway: 'Internationale',
+        notes: 'Échange Erasmus+ à l’Université de Porto.'
+    }
+];
 
-const colors = {
-    purple: 'rgba(124, 93, 255, 0.9)',
-    orange: 'rgba(244, 96, 54, 0.9)',
-    teal: 'rgba(93, 244, 180, 0.9)',
-    purpleSoft: 'rgba(124, 93, 255, 0.3)',
-    orangeSoft: 'rgba(244, 96, 54, 0.3)'
-};
+const enrollmentCtx = document.getElementById('enrollmentChart');
+const specializationCtx = document.getElementById('specializationChart');
+const studentLog = document.getElementById('studentLog');
+const gpaValue = document.getElementById('gpaValue');
+const studentMetric = document.querySelector('[data-metric="students"]');
 
-let revenueChart;
-let channelChart;
-
-document.addEventListener('DOMContentLoaded', () => {
-    const revenueCtx = document.getElementById('revenueChart');
-    const channelCtx = document.getElementById('channelChart');
-    const scenarioLog = document.getElementById('scenarioLog');
-    const exportJsonBtn = document.getElementById('exportJson');
-    const exportCsvBtn = document.getElementById('exportCsv');
-
-    revenueChart = new Chart(revenueCtx, {
-        type: 'line',
-        data: {
-            labels: state.revenue.labels,
-            datasets: [
-                {
-                    data: state.revenue.values,
-                    borderColor: colors.purple,
-                    backgroundColor: colors.purpleSoft,
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 3,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#fff'
-                }
-            ]
+const enrollmentChart = new Chart(enrollmentCtx, {
+    type: 'line',
+    data: {
+        labels: yearLabels,
+        datasets: [
+            {
+                label: 'Étudiants inscrits',
+                data: enrollmentValues,
+                borderColor: '#25d2ff',
+                backgroundColor: 'rgba(37, 210, 255, 0.25)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.35
+            }
+        ]
+    },
+    options: {
+        plugins: {
+            legend: { display: false }
         },
-        options: {
-            plugins: {
-                legend: { display: false }
+        scales: {
+            x: {
+                grid: { color: 'rgba(255,255,255,0.05)' }
             },
-            scales: {
-                x: {
-                    grid: { color: 'rgba(255,255,255,0.05)' },
-                    ticks: { color: '#a8b2d4' }
-                },
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(255,255,255,0.05)' },
-                    ticks: { color: '#a8b2d4', callback: value => `$${value}k` }
+            y: {
+                beginAtZero: false,
+                grid: { color: 'rgba(255,255,255,0.05)' },
+                ticks: {
+                    callback: (value) => `${value.toLocaleString('fr-DZ')} étudiants`
                 }
             }
         }
-    });
-
-    channelChart = new Chart(channelCtx, {
-        type: 'bar',
-        data: {
-            labels: state.channels.labels,
-            datasets: [
-                {
-                    data: state.channels.values,
-                    backgroundColor: [colors.orange, colors.purple, colors.teal, '#5b8dff'],
-                    borderRadius: 10
-                }
-            ]
-        },
-        options: {
-            plugins: { legend: { display: false } },
-            scales: {
-                x: { ticks: { color: '#a8b2d4' }, grid: { display: false } },
-                y: { beginAtZero: true, ticks: { color: '#a8b2d4', callback: val => `${val}%` }, grid: { color: 'rgba(255,255,255,0.05)' } }
-            }
-        }
-    });
-
-    renderScenarioLog(scenarioLog);
-
-    const form = document.getElementById('dataForm');
-    const confidenceInput = form.querySelector('input[name="confidence"]');
-    const confidenceOutput = document.getElementById('confidenceValue');
-
-    confidenceInput?.addEventListener('input', event => {
-        confidenceOutput.textContent = `${event.target.value}%`;
-    });
-
-    exportJsonBtn?.addEventListener('click', () => exportData('json'));
-    exportCsvBtn?.addEventListener('click', () => exportData('csv'));
-
-    form.addEventListener('submit', event => {
-        event.preventDefault();
-        const formData = new FormData(form);
-        const target = formData.get('target');
-        const label = formData.get('label');
-        const value = Number(formData.get('value'));
-        const scenarioType = formData.get('scenario');
-        const confidence = Number(formData.get('confidence'));
-        const notes = (formData.get('notes') || '').toString().trim();
-
-        if (!label || Number.isNaN(value)) {
-            return;
-        }
-
-        const dataset = state[target];
-        const existingIndex = dataset.labels.findIndex(item => item.toLowerCase() === label.toLowerCase());
-
-        if (existingIndex >= 0) {
-            dataset.values[existingIndex] = value;
-        } else {
-            dataset.labels.push(label);
-            dataset.values.push(value);
-        }
-
-        updateChart(target);
-        prependScenario({
-            scenarioType,
-            target,
-            label,
-            value,
-            confidence,
-            notes
-        });
-        renderScenarioLog(scenarioLog);
-        form.reset();
-        confidenceOutput.textContent = '80%';
-    });
+    }
 });
+
+const specializationChart = new Chart(specializationCtx, {
+    type: 'doughnut',
+    data: {
+        labels: specializationLabels,
+        datasets: [
+            {
+                data: specializationValues,
+                backgroundColor: ['#ff7d9c', '#25d2ff', '#c7ff6b', '#ffdd57', '#a784ff'],
+                borderWidth: 0,
+                hoverOffset: 8
+            }
+        ]
+    },
+    options: {
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    color: 'rgba(238, 241, 255, 0.9)'
+                }
+            }
+        },
+        cutout: '55%'
+    }
+});
+
+function updateStudentMetric() {
+    const total = specializationValues.reduce((acc, value) => acc + value, 0);
+    studentMetric.textContent = total.toLocaleString('fr-DZ');
+}
+
+function renderLog() {
+    if (!studentEntries.length) {
+        studentLog.innerHTML = '<p class="muted">Aucune fiche soumise pour le moment.</p>';
+        return;
+    }
+
+    studentLog.innerHTML = studentEntries
+        .slice(0, 6)
+        .map(
+            (student) => `
+            <article class="log-entry">
+                <header>
+                    <span>${student.name}</span>
+                    <span>${student.gpa.toFixed(1)}/20</span>
+                </header>
+                <p class="meta">${student.matricule} • ${student.speciality} • ${student.year} ${student.semester}</p>
+                <p class="meta">Orientation : ${student.pathway}</p>
+                <p>${student.notes || '—'}</p>
+            </article>
+        `
+        )
+        .join('');
+}
+
+function incrementDataset(labels, values, key) {
+    const index = labels.indexOf(key);
+    if (index === -1) {
+        labels.push(key);
+        values.push(1);
+    } else {
+        values[index] += 1;
+    }
+}
+
+function handleFormSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const entry = Object.fromEntries(formData.entries());
+    entry.gpa = Number(entry.gpa);
+    studentEntries.unshift(entry);
+
+    incrementDataset(yearLabels, enrollmentValues, entry.year);
+    enrollmentChart.update();
+
+    incrementDataset(specializationLabels, specializationValues, entry.speciality);
+    specializationChart.update();
+
+    updateStudentMetric();
+    renderLog();
+
+    event.target.reset();
+    event.target.gpa.value = 14;
+    gpaValue.textContent = '14.0';
+}
+
+function setupRangeOutput() {
+    const range = document.querySelector('input[name="gpa"]');
+    range.addEventListener('input', (event) => {
+        gpaValue.textContent = Number(event.target.value).toFixed(1);
+    });
+}
 
 function exportData(format) {
     const payload = {
-        revenue: { ...state.revenue },
-        channels: { ...state.channels },
-        scenarios: state.scenarios
+        charts: {
+            enrollment: {
+                labels: yearLabels,
+                values: enrollmentValues
+            },
+            specializations: {
+                labels: specializationLabels,
+                values: specializationValues
+            }
+        },
+        students: studentEntries
     };
 
+    let blob;
+    let filename;
+
     if (format === 'json') {
-        const jsonString = JSON.stringify(payload, null, 2);
-        triggerDownload(jsonString, 'insightflow-data.json', 'application/json');
-        return;
+        blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        filename = 'ub1-students.json';
+    } else {
+        const headers = ['Nom', 'Matricule', 'Spécialité', 'Année', 'Semestre', 'Moyenne', 'Orientation', 'Notes'];
+        const rows = studentEntries.map((student) =>
+            [
+                student.name,
+                student.matricule,
+                student.speciality,
+                student.year,
+                student.semester,
+                student.gpa,
+                student.pathway,
+                (student.notes || '').replace(/\n/g, ' ')
+            ]
+                .map((value) => `"${String(value).replace(/"/g, '""')}"`)
+                .join(',')
+        );
+        const csv = [headers.join(','), ...rows].join('\n');
+        blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        filename = 'ub1-students.csv';
     }
 
-    if (format === 'csv') {
-        const csvString = buildCsvString(payload);
-        triggerDownload(csvString, 'insightflow-data.csv', 'text/csv');
-    }
-}
-
-function buildCsvString(payload) {
-    const rows = [
-        ['dataset', 'label', 'value', 'confidence', 'scenarioType', 'target', 'notes']
-    ];
-
-    payload.revenue.labels.forEach((label, index) => {
-        rows.push(['Revenue', label, payload.revenue.values[index], '', '', '', '']);
-    });
-
-    payload.channels.labels.forEach((label, index) => {
-        rows.push(['Channels', label, payload.channels.values[index], '', '', '', '']);
-    });
-
-    payload.scenarios.forEach(entry => {
-        rows.push([
-            'Scenario',
-            entry.label,
-            entry.value,
-            entry.confidence || '',
-            entry.scenarioType || '',
-            entry.target || '',
-            (entry.notes || '').replace(/\n/g, ' ')
-        ]);
-    });
-
-    return rows
-        .map(row => row.map(value => `"${String(value ?? '').replace(/"/g, '""')}"`).join(','))
-        .join('\n');
-}
-
-function triggerDownload(content, filename, type) {
-    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
+    link.href = url;
     link.download = filename;
-    document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href);
+    URL.revokeObjectURL(url);
 }
 
-function updateChart(target) {
-    if (target === 'revenue' && revenueChart) {
-        revenueChart.data.labels = state.revenue.labels;
-        revenueChart.data.datasets[0].data = state.revenue.values;
-        revenueChart.update();
-    }
-
-    if (target === 'channels' && channelChart) {
-        channelChart.data.labels = state.channels.labels;
-        channelChart.data.datasets[0].data = state.channels.values;
-        channelChart.update();
-    }
+function bindExports() {
+    document.getElementById('exportJson').addEventListener('click', () => exportData('json'));
+    document.getElementById('exportCsv').addEventListener('click', () => exportData('csv'));
 }
 
-function prependScenario(entry) {
-    state.scenarios.unshift({
-        ...entry,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    });
-    state.scenarios = state.scenarios.slice(0, 5);
+function init() {
+    updateStudentMetric();
+    renderLog();
+    setupRangeOutput();
+    bindExports();
+    document.getElementById('studentForm').addEventListener('submit', handleFormSubmit);
 }
 
-function renderScenarioLog(container) {
-    if (!state.scenarios.length) {
-        container.innerHTML = '<p class="muted">Submit a scenario to see it logged here.</p>';
-        return;
-    }
-
-    container.innerHTML = state.scenarios
-        .map(scenario => `
-            <article class="scenario-entry">
-                <header>
-                    <span class="scenario-pill">${scenario.scenarioType}</span>
-                    <span class="timestamp">${scenario.timestamp}</span>
-                </header>
-                <p class="scenario-target">${scenario.target === 'revenue' ? 'Revenue' : 'Channel mix'} → <strong>${scenario.label}</strong> updated to <strong>${scenario.value}</strong></p>
-                <p class="scenario-meta">Confidence: ${scenario.confidence || 0}%</p>
-                ${scenario.notes ? `<p class="scenario-notes">${scenario.notes}</p>` : ''}
-            </article>
-        `)
-        .join('');
-}
+window.addEventListener('DOMContentLoaded', init);
