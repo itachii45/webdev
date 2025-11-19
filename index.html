@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Observatoire Étudiants - Université Blida 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header class="global-nav">
+        <div class="brand">
+            <div class="crest">UB1</div>
+            <div>
+                <p class="eyebrow">Université Saad Dahlab</p>
+                <strong>Blida 1</strong>
+            </div>
+        </div>
+        <nav>
+            <a href="#apercu">Aperçu</a>
+            <a href="#analytics">Analytique</a>
+            <a href="#lab">Data Lab</a>
+            <button class="pill">Télécharger la brochure</button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="apercu">
+            <div class="hero-text">
+                <p class="eyebrow">Observatoire des étudiants</p>
+                <h1>Pulsations étudiantes de l'Université Blida 1</h1>
+                <p class="lede">
+                    Visualisez l'évolution des inscriptions, la diversité des spécialités et l'engagement étudiant pour guider
+                    vos décisions pédagogiques en temps réel.
+                </p>
+                <div class="hero-actions">
+                    <button class="primary">Consulter le rapport 2024</button>
+                    <button class="ghost">Partager au rectorat</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="glow-card">
+                    <p>Laboratoires actifs</p>
+                    <strong>32</strong>
+                    <span>IA, Énergies, BioTech & plus</span>
+                </div>
+                <div class="pulse">
+                    <p>taux d'engagement</p>
+                    <strong>92%</strong>
+                    <small>clubs & hackathons</small>
+                </div>
+            </div>
+        </section>
+
+        <section class="quick-stats">
+            <article class="stat-card">
+                <p>Total étudiants</p>
+                <strong data-metric="students">0</strong>
+                <span>licence & master</span>
+            </article>
+            <article class="stat-card">
+                <p>Programmes internationaux</p>
+                <strong>18</strong>
+                <span>partenariats actifs</span>
+            </article>
+            <article class="stat-card">
+                <p>Startups incubées</p>
+                <strong>41</strong>
+                <span>depuis 2021</span>
+            </article>
+            <article class="stat-card">
+                <p>Insertion pro.</p>
+                <strong>87%</strong>
+                <span>6 mois après diplôme</span>
+            </article>
+        </section>
+
+        <section class="analytics-grid" id="analytics">
+            <article class="panel wide">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Inscriptions</p>
+                        <h2>Évolution annuelle des étudiants</h2>
+                    </div>
+                    <div class="status-chip positive">+4.2% cette année</div>
+                </div>
+                <canvas id="enrollmentChart" height="200"></canvas>
+            </article>
+
+            <article class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Spécialités</p>
+                        <h2>Répartition des filières</h2>
+                    </div>
+                </div>
+                <canvas id="specializationChart" height="220"></canvas>
+            </article>
+
+            <article class="panel insights">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Moments forts</p>
+                        <h2>Vie étudiante</h2>
+                    </div>
+                </div>
+                <ul>
+                    <li>
+                        <strong>Hack4Blida</strong>
+                        <p>140 étudiants réunis pour résoudre les défis climatiques de la Mitidja.</p>
+                    </li>
+                    <li>
+                        <strong>Programme Erasmus+</strong>
+                        <p>28 mobilités sortantes vers l'Espagne, la Turquie et l'Italie.</p>
+                    </li>
+                    <li>
+                        <strong>Clinique IA</strong>
+                        <p>Étudiants IA accompagnent les start-ups locales sur les projets data.</p>
+                    </li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="data-lab" id="lab">
+            <article class="panel form-panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Data lab</p>
+                        <h2>Ajouter une fiche étudiant</h2>
+                        <p class="small">Chaque nouvelle fiche met à jour les graphiques instantanément.</p>
+                    </div>
+                    <div class="export-actions">
+                        <p class="small muted">Exporter</p>
+                        <div class="export-buttons">
+                            <button id="exportJson" type="button" class="ghost">JSON</button>
+                            <button id="exportCsv" type="button" class="ghost">CSV</button>
+                        </div>
+                    </div>
+                </div>
+                <form id="studentForm" class="student-form">
+                    <label>
+                        Nom & prénom
+                        <input type="text" name="name" placeholder="Nesrine Mahdi" required />
+                    </label>
+                    <label>
+                        Matricule
+                        <input type="text" name="matricule" placeholder="22CSI204" required />
+                    </label>
+                    <label>
+                        Spécialité
+                        <select name="speciality" required>
+                            <option value="Informatique">Informatique</option>
+                            <option value="Intelligence Artificielle">Intelligence Artificielle</option>
+                            <option value="Télécommunications">Télécommunications</option>
+                            <option value="Énergies Renouvelables">Énergies Renouvelables</option>
+                            <option value="Génie Biomédical">Génie Biomédical</option>
+                        </select>
+                    </label>
+                    <label>
+                        Année académique
+                        <select name="year" required>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024" selected>2024</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </label>
+                    <label>
+                        Semestre
+                        <select name="semester" required>
+                            <option value="S1">S1</option>
+                            <option value="S2">S2</option>
+                        </select>
+                    </label>
+                    <label class="range-field">
+                        Moyenne générale
+                        <div class="range-input">
+                            <input type="range" name="gpa" min="8" max="20" step="0.1" value="14" />
+                            <output id="gpaValue">14.0</output>
+                        </div>
+                    </label>
+                    <label>
+                        Orientation
+                        <select name="pathway">
+                            <option value="Recherche">Recherche</option>
+                            <option value="Entrepreneuriat">Entrepreneuriat</option>
+                            <option value="Internationale">Internationale</option>
+                            <option value="Professionnalisation">Professionnalisation</option>
+                        </select>
+                    </label>
+                    <label class="full">
+                        Notes & projets marquants
+                        <textarea name="notes" rows="3" placeholder="Participation au challenge Sahara Solar..."></textarea>
+                    </label>
+                    <button type="submit" class="primary full">Enregistrer la fiche</button>
+                </form>
+                <p class="hint">Les fiches sont synchronisées avec les graphiques d'inscriptions et de spécialités.</p>
+            </article>
+            <article class="panel log-panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Live feed</p>
+                        <h2>Inscriptions des étudiants</h2>
+                    </div>
+                </div>
+                <div id="studentLog" class="log-list">
+                    <p class="muted">Aucune fiche soumise pour le moment.</p>
+                </div>
+            </article>
+        </section>
+    </main>
+</body>
+</html>
